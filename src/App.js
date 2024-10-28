@@ -203,18 +203,36 @@ function App() {
       setLoading(true);
       setError(null);
       
-      const activityResponse = await fetch('/data/Activity-Report.csv');
+      // Log the current environment
+      console.log('Environment:', process.env.NODE_ENV);
+      
+      // Use the full GitHub Pages URL for production
+      const baseUrl = process.env.NODE_ENV === 'production' 
+        ? 'https://vishal0589.github.io/security-dashboard'
+        : '';
+      
+      console.log('Base URL:', baseUrl);
+      
+      const activityUrl = `${baseUrl}/data/Activity-Report.csv`;
+      const attendanceUrl = `${baseUrl}/data/Post-basis-attendance.csv`;
+      
+      console.log('Fetching activity data from:', activityUrl);
+      const activityResponse = await fetch(activityUrl);
+      if (!activityResponse.ok) throw new Error(`Activity data HTTP error! status: ${activityResponse.status}`);
       const activityText = await activityResponse.text();
       const activityResults = parse(activityText, { header: true });
       
-      const attendanceResponse = await fetch('/data/Post-basis-attendance.csv');
+      console.log('Fetching attendance data from:', attendanceUrl);
+      const attendanceResponse = await fetch(attendanceUrl);
+      if (!attendanceResponse.ok) throw new Error(`Attendance data HTTP error! status: ${attendanceResponse.status}`);
       const attendanceText = await attendanceResponse.text();
       const attendanceResults = parse(attendanceText, { header: true });
-
+  
       processData(activityResults.data, attendanceResults.data);
     } catch (err) {
-      setError(err.message);
-      console.error('Error loading data:', err);
+      const errorMessage = `Failed to load data: ${err.message}`;
+      console.error(errorMessage);
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
