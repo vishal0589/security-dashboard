@@ -202,12 +202,13 @@ function App() {
     try {
       setLoading(true);
       setError(null);
-      
-      const activityResponse = await fetch('/data/Activity-Report.csv');
+      const baseUrl = process.env.PUBLIC_URL || '';
+
+      const activityResponse = await fetch('${baseUrl}/data/Activity-Report.csv');
       const activityText = await activityResponse.text();
       const activityResults = parse(activityText, { header: true });
       
-      const attendanceResponse = await fetch('/data/Post-basis-attendance.csv');
+      const attendanceResponse = await fetch('${baseUrl}/data/Post-basis-attendance.csv');
       const attendanceText = await attendanceResponse.text();
       const attendanceResults = parse(attendanceText, { header: true });
 
