@@ -202,7 +202,9 @@ function App() {
     try {
       setLoading(true);
       setError(null);
-      const baseUrl = process.env.NODE_ENV === 'production';
+      const baseUrl = process.env.NODE_ENV === 'production' 
+      ? 'https://vishal0589.github.io/security-dashboard'
+      : '';
 
       const activityResponse = await fetch('${baseUrl}/data/Activity-Report.csv');
       const activityText = await activityResponse.text();
