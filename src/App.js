@@ -202,32 +202,18 @@ function App() {
       setLoading(true);
       setError(null);
       
-      // Full URLs to your CSV files
-      const activityUrl = 'https://vishal0589.github.io/security-dashboard/data/Activity-Report.csv';
-      const attendanceUrl = 'https://vishal0589.github.io/security-dashboard/data/Post-basis-attendance.csv';
-      
-      console.log('Loading activity data from:', activityUrl);
-      const activityResponse = await fetch(activityUrl);
-      if (!activityResponse.ok) {
-        throw new Error(`Activity data fetch failed: ${activityResponse.status}`);
-      }
+      const activityResponse = await fetch('/data/Activity-Report.csv');
       const activityText = await activityResponse.text();
-      console.log('Activity data sample:', activityText.substring(0, 100));
       const activityResults = parse(activityText, { header: true });
       
-      console.log('Loading attendance data from:', attendanceUrl);
-      const attendanceResponse = await fetch(attendanceUrl);
-      if (!attendanceResponse.ok) {
-        throw new Error(`Attendance data fetch failed: ${attendanceResponse.status}`);
-      }
+      const attendanceResponse = await fetch('/data/Post-basis-attendance.csv');
       const attendanceText = await attendanceResponse.text();
-      console.log('Attendance data sample:', attendanceText.substring(0, 100));
       const attendanceResults = parse(attendanceText, { header: true });
   
       processData(activityResults.data, attendanceResults.data);
     } catch (err) {
-      console.error('Data loading error:', err);
       setError(err.message);
+      console.error('Error loading data:', err);
     } finally {
       setLoading(false);
     }
