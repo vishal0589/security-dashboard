@@ -202,7 +202,7 @@ function App() {
     try {
       setLoading(true);
       setError(null);
-      const baseUrl = process.env.PUBLIC_URL || '';
+      const baseUrl = process.env.NODE_ENV === 'production';
 
       const activityResponse = await fetch('${baseUrl}/data/Activity-Report.csv');
       const activityText = await activityResponse.text();
