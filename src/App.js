@@ -197,42 +197,37 @@ function App() {
     calculatePerformanceMetrics(activityData, attendanceSummary, guardStatistics);
   };
 
-  // Data loading function
   const loadData = async () => {
     try {
       setLoading(true);
       setError(null);
       
-      // Log the current environment
-      console.log('Environment:', process.env.NODE_ENV);
+      // Full URLs to your CSV files
+      const activityUrl = 'https://vishal0589.github.io/security-dashboard/data/Activity-Report.csv';
+      const attendanceUrl = 'https://vishal0589.github.io/security-dashboard/data/Post-basis-attendance.csv';
       
-      // Use the full GitHub Pages URL for production
-      const baseUrl = process.env.NODE_ENV === 'production' 
-        ? 'https://vishal0589.github.io/security-dashboard'
-        : '';
-      
-      console.log('Base URL:', baseUrl);
-      
-      const activityUrl = `${baseUrl}/data/Activity-Report.csv`;
-      const attendanceUrl = `${baseUrl}/data/Post-basis-attendance.csv`;
-      
-      console.log('Fetching activity data from:', activityUrl);
+      console.log('Loading activity data from:', activityUrl);
       const activityResponse = await fetch(activityUrl);
-      if (!activityResponse.ok) throw new Error(`Activity data HTTP error! status: ${activityResponse.status}`);
+      if (!activityResponse.ok) {
+        throw new Error(`Activity data fetch failed: ${activityResponse.status}`);
+      }
       const activityText = await activityResponse.text();
+      console.log('Activity data sample:', activityText.substring(0, 100));
       const activityResults = parse(activityText, { header: true });
       
-      console.log('Fetching attendance data from:', attendanceUrl);
+      console.log('Loading attendance data from:', attendanceUrl);
       const attendanceResponse = await fetch(attendanceUrl);
-      if (!attendanceResponse.ok) throw new Error(`Attendance data HTTP error! status: ${attendanceResponse.status}`);
+      if (!attendanceResponse.ok) {
+        throw new Error(`Attendance data fetch failed: ${attendanceResponse.status}`);
+      }
       const attendanceText = await attendanceResponse.text();
+      console.log('Attendance data sample:', attendanceText.substring(0, 100));
       const attendanceResults = parse(attendanceText, { header: true });
   
       processData(activityResults.data, attendanceResults.data);
     } catch (err) {
-      const errorMessage = `Failed to load data: ${err.message}`;
-      console.error(errorMessage);
-      setError(errorMessage);
+      console.error('Data loading error:', err);
+      setError(err.message);
     } finally {
       setLoading(false);
     }
