@@ -1,7 +1,6 @@
 {
   "name": "security-dashboard",
   "version": "0.1.0",
-  "homepage": "https://vishal0589.github.io/security-dashboard",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
