@@ -202,15 +202,12 @@ function App() {
     try {
       setLoading(true);
       setError(null);
-      const baseUrl = process.env.NODE_ENV === 'production' 
-      ? 'https://vishal0589.github.io/security-dashboard'
-      : '';
-
-      const activityResponse = await fetch('${baseUrl}/data/Activity-Report.csv');
+      
+      const activityResponse = await fetch('/data/Activity-Report.csv');
       const activityText = await activityResponse.text();
       const activityResults = parse(activityText, { header: true });
       
-      const attendanceResponse = await fetch('${baseUrl}/data/Post-basis-attendance.csv');
+      const attendanceResponse = await fetch('/data/Post-basis-attendance.csv');
       const attendanceText = await attendanceResponse.text();
       const attendanceResults = parse(attendanceText, { header: true });
 
